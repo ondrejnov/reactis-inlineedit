@@ -5,17 +5,26 @@ export default class InlineEdit extends React.Component {
 
 	static propTypes = {
 		component: React.PropTypes.element.isRequired,
+		value: React.PropTypes.any,
+		layout: React.PropTypes.string.isRequired,
+		display: React.PropTypes.string.isRequired,
 		cancelText: React.PropTypes.string.isRequired,
 		saveText: React.PropTypes.string.isRequired,
 		minWidth: React.PropTypes.number.isRequired,
+		autoSave: React.PropTypes.bool.isRequired,
+		allClickable: React.PropTypes.bool.isRequired,
 		onSave: React.PropTypes.func,
 		onCancel: React.PropTypes.func
 	};
 
 	static defaultProps = {
+		autoSave: false,
+		display: 'inline-block',
+		layout: 'popup',
 		cancelText: 'Storno',
 		saveText: 'OK',
-		minWidth: 92
+		minWidth: 92,
+		allClickable: false
 	};
 
 	constructor(props) {
@@ -38,7 +47,7 @@ export default class InlineEdit extends React.Component {
 	}
 
 	handleDocumentClick(event) {
-		if(this.mounted) {
+		if(this.mounted && this.props.layout != 'inline') {
 			if (!ReactDOM.findDOMNode(this).contains(event.target)) {
 				this.setState({isOpen:false});
 				if (this.props.onCancel) {
@@ -54,6 +63,13 @@ export default class InlineEdit extends React.Component {
 
 	handleChange(value) {
 		this.setState({value});
+	}
+
+	handleBlur(value) {
+		if (this.props.autoSave && this.props.onSave) {
+			this.props.onSave(value);
+			this.setState({isOpen: false});
+		}
 	}
 
 	handleClickSave(e) {
@@ -79,22 +95,54 @@ export default class InlineEdit extends React.Component {
 		}
 	}
 
-	renderInlineEditBox() {
-		if (!this.state.isOpen) {
-			return false;
-		}
-
-		const editComponent = React.cloneElement(this.props.component, {
+	getEditElement() {
+		return React.cloneElement(this.props.component, {
 			value: this.state.value,
 			autoFocus: true,
 			onChange: (value) => this.handleChange(value),
+			onBlur: (value) => this.handleBlur(value),
 			onSave: (value) => this.handleEditSave(value)
 		});
+	}
+
+	renderInlineEdit() {
+		if (!this.state.isOpen || this.props.layout != 'inline') {
+			return (
+				<span className="inline-text">
+					<span onClick={(e) => this.handleEdit(e)}
+						  className="editicon fa fa-pencil">
+					</span>
+					{this.props.allClickable &&
+						<span onClick={(e) => this.handleEdit(e)} style={{cursor:'pointer', display: this.props.display}}>
+							{this.props.children}
+						</span>}
+					{!this.props.allClickable &&
+						<span style={{display: this.props.display}}>
+							{this.props.children}
+						</span>}
+				</span>
+			);
+		}
+		else {
+			return (
+				<div className="inlinedit-inline">
+					{this.getEditElement()}
+				</div>
+			);
+
+		}
+	}
+
+	renderPopupEdit() {
+		if (!this.state.isOpen || this.props.layout == 'inline') {
+			return false;
+		}
 
 		return (
 			<div className="inlinedit" style={{minWidth: this.props.minWidth}}>
 				<div className="inlinedit-inner">
-					<div>{editComponent}</div>
+					<div>{this.getEditElement()}</div>
+					{!this.props.autoSave &&
 					<div className="buttons">
 						<button onClick={(e) => this.handleClickCancel(e)} className="btn btn-grey">
 							{this.props.cancelText}
@@ -102,7 +150,7 @@ export default class InlineEdit extends React.Component {
 						<button onClick={(e) => this.handleClickSave(e)} className="btn btn-primary">
 							{this.props.saveText}
 						</button>
-					</div>
+					</div>}
 				</div>
 			</div>
 		)
@@ -111,11 +159,8 @@ export default class InlineEdit extends React.Component {
 	render() {
 		return  (
 				<div className="inlineedit-wrapper">
-					<span onClick={(e) => this.handleEdit(e)} className="editicon fa fa-pencil"></span>
-					<span onClick={(e) => this.handleEdit(e)} style={{cursor:'pointer', display: 'inline-block'}}>
-						{this.props.children}
-					</span>
-					{this.renderInlineEditBox()}
+					{this.renderInlineEdit()}
+					{this.renderPopupEdit()}
 				</div>
 		)
 	}
