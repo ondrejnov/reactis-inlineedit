@@ -1,0 +1,53 @@
+.inlineedit-wrapper {
+    position: relative;
+}
+
+.inlineedit-wrapper .editicon {
+    cursor: pointer;
+    position: absolute;
+    color: transparent;
+    right: 0;
+}
+
+.inlineedit-wrapper:hover .editicon {
+    color: #AAA;
+}
+
+.inlinedit-inner {
+    padding: 4px 6px;
+}
+
+.inlinedit {
+    padding: 3px;
+    background: #FFF;
+    border: 1px solid #CCC;
+    position: absolute;
+    top: -3px;
+    left: -5px;
+    width: 100%;
+    box-sizing: content-box;
+    z-index: 1000;
+    -webkit-box-shadow: 2px 2px 5px 0px rgba(224,224,224,1);
+    -moz-box-shadow: 2px 2px 5px 0px rgba(224,224,224,1);
+    box-shadow: 2px 2px 5px 0px rgba(224,224,224,1);
+}
+
+.inlinedit .form-control {
+    font-size: 12px;
+    height: 25px;
+    padding: 1px 5px;
+}
+
+.inlinedit .buttons {
+    text-align: right;
+    margin-top: 5px;
+}
+
+.inlinedit .buttons button {
+    padding: 0 4px;
+    font-size: 12px;
+}
+
+.inlinedit .buttons .btn-primary {
+    margin-left: 8px;
+}
