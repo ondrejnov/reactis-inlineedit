@@ -112,7 +112,7 @@ export default class InlineEdit extends React.Component {
 		return  (
 				<div className="inlineedit-wrapper">
 					<span onClick={(e) => this.handleEdit(e)} className="editicon fa fa-pencil"></span>
-					<span onClick={(e) => this.handleEdit(e)} style={{cursor:'pointer'}}>
+					<span onClick={(e) => this.handleEdit(e)} style={{cursor:'pointer', display: 'inline-block'}}>
 						{this.props.children}
 					</span>
 					{this.renderInlineEditBox()}
