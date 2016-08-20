@@ -168,7 +168,6 @@ export default class InlineEdit extends React.Component {
 	}
 
 	render() {
-		console.log('x');
 		return  (
 				<div className="inlineedit-wrapper">
 					{this.renderInlineEdit()}
