@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import shallowEqual from 'react-pure-render/shallowEqual';
 
 export default class InlineEdit extends React.Component {
 
@@ -44,6 +45,16 @@ export default class InlineEdit extends React.Component {
 	componentWillUnmount() {
 		this.mounted = false;
 		document.removeEventListener('click', this.handleDocumentClick, false);
+	}
+
+	shouldComponentUpdate(nextProps, nextState) {
+
+		const shouldUpdate =
+			!shallowEqual(this.props, nextProps) ||
+			!shallowEqual(this.state, nextState);
+
+
+		return shouldUpdate;
 	}
 
 	handleDocumentClick(event) {
