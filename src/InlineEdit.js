@@ -67,7 +67,9 @@ export default class InlineEdit extends React.Component {
 
 	handleBlur(value) {
 		if (this.props.autoSave && this.props.onSave) {
-			this.props.onSave(value);
+			if (this.state.value != value) {
+				this.props.onSave(value);
+			}
 			this.setState({isOpen: false});
 		}
 	}
@@ -110,7 +112,7 @@ export default class InlineEdit extends React.Component {
 			return (
 				<span className="inline-text">
 					<span onClick={(e) => this.handleEdit(e)}
-						  className="editicon fa fa-pencil">
+						  className="editicon icon-pencil3">
 					</span>
 					{this.props.allClickable &&
 						<span onClick={(e) => this.handleEdit(e)} style={{cursor:'pointer', display: this.props.display}}>
@@ -144,7 +146,7 @@ export default class InlineEdit extends React.Component {
 					<div>{this.getEditElement()}</div>
 					{!this.props.autoSave &&
 					<div className="buttons">
-						<button onClick={(e) => this.handleClickCancel(e)} className="btn btn-grey">
+						<button onClick={(e) => this.handleClickCancel(e)} className="btn btn-default">
 							{this.props.cancelText}
 						</button>
 						<button onClick={(e) => this.handleClickSave(e)} className="btn btn-primary">
